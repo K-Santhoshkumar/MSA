@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    environment {
+        BACKEND_DIR = 'backend'
+        FRONTEND_DIR = 'frontend'
+    }
+
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing backend dependencies...'
+                bat "cd %BACKEND_DIR% && npm install"
+
+                echo 'Installing frontend dependencies...'
+                bat "cd %FRONTEND_DIR% && npm install"
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo 'Running backend tests...'
+                bat "cd %BACKEND_DIR% && npm test"
+
+                echo 'Running frontend tests...'
+                bat "cd %FRONTEND_DIR% && npm test"
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building backend...'
+                bat "cd %BACKEND_DIR% && npm run build"
+
+                echo 'Building frontend...'
+                bat "cd %FRONTEND_DIR% && npm run build"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                // Customize deploy commands here, for example:
+                // bat "cd %BACKEND_DIR% && npm run deploy"
+                // bat "cd %FRONTEND_DIR% && npm run deploy"
+                bat "echo Deployment step - implement your deploy commands here"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for errors.'
+        }
+    }
+}
